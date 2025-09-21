@@ -1,0 +1,21 @@
+[project]
+name = "itinerary"
+version = "0.1.0"
+readme = "README.md"
+authors = [
+    { name = "Senyu Xie", email = "senyuxie@qq.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "grpcio>=1.75.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "grpcio-tools>=1.75.0",
+    "pytest>=8.4.2",
+]

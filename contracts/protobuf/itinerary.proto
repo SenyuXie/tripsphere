@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package tripsphere.itinerary.v1;
+
+service ItineraryService {
+    rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
+}
+
+message GetVersionRequest {
+
+}
+
+message GetVersionResponse {
+    string version = 1;  // e.g., "0.1.0"
+}
