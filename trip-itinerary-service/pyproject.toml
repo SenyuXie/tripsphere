@@ -8,7 +8,7 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "grpcio>=1.75.0",
-    "protobuf>=6.32.1",
+    "tripsphere",
 ]
 
 [build-system]
@@ -21,6 +21,12 @@ dev = [
     "mypy-protobuf>=3.6.0",
 ]
 
+[tool.uv.sources]
+tripsphere = { workspace = true }
+
+[tool.uv.workspace]
+members = ["libs/*"]
+
 [tool.ruff]
 extend = "../ruff.toml"
-extend-exclude = ["src/itinerary/protos"]
+extend-exclude = ["libs/tripsphere"]

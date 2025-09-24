@@ -1,29 +1,26 @@
-from concurrent import futures
+import asyncio
 from importlib.metadata import PackageNotFoundError, version
 
 import grpc
+from tripsphere.itinerary import metadata_pb2, metadata_pb2_grpc
 
-from itinerary.protos import itinerary_pb2, itinerary_pb2_grpc
 
-
-class ItineraryServicer(itinerary_pb2_grpc.ItineraryServiceServicer):
+class MetadataServicer(metadata_pb2_grpc.MetadataServiceServicer):
     def GetVersion(self, request, context):
         try:
-            ver = version("itinerary")
+            _version = version("itinerary")
         except PackageNotFoundError:
-            ver = "unknown"
-        return itinerary_pb2.GetVersionResponse(version=ver)
+            _version = "unknown"
+        return metadata_pb2.GetVersionResponse(version=_version)
 
 
-def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    itinerary_pb2_grpc.add_ItineraryServiceServicer_to_server(
-        ItineraryServicer(), server
-    )
+async def serve():
+    server = grpc.aio.server()
+    metadata_pb2_grpc.add_MetadataServiceServicer_to_server(MetadataServicer(), server)
     server.add_insecure_port("[::]:50051")
-    server.start()
-    server.wait_for_termination()
+    await server.start()
+    await server.wait_for_termination()
 
 
 if __name__ == "__main__":
-    serve()
+    asyncio.run(serve())

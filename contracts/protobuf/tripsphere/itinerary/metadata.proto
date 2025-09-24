@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package tripsphere.itinerary;
+
+service MetadataService {
+  // Get the version of itinerary service.
+  rpc GetVersion(GetVersionRequest) returns (GetVersionResponse) {}
+}
+
+message GetVersionRequest {}
+
+message GetVersionResponse {
+  string version = 1; // e.g., "0.1.0"
+}
