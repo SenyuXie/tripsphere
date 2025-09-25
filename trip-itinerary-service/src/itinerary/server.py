@@ -6,7 +6,9 @@ from tripsphere.itinerary import metadata_pb2, metadata_pb2_grpc
 
 
 class MetadataServicer(metadata_pb2_grpc.MetadataServiceServicer):
-    def GetVersion(self, request, context):
+    def GetVersion(
+        self, request: metadata_pb2.GetVersionRequest, context: grpc.ServicerContext
+    ) -> metadata_pb2.GetVersionResponse:
         try:
             _version = version("itinerary")
         except PackageNotFoundError:
@@ -14,7 +16,7 @@ class MetadataServicer(metadata_pb2_grpc.MetadataServiceServicer):
         return metadata_pb2.GetVersionResponse(version=_version)
 
 
-async def serve():
+async def serve() -> None:
     server = grpc.aio.server()
     metadata_pb2_grpc.add_MetadataServiceServicer_to_server(MetadataServicer(), server)
     server.add_insecure_port("[::]:50051")
