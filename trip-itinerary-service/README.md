@@ -1,4 +1,10 @@
-First, generate the gRPC code:
+First, synchronize the dependencies:
+
+```shell
+uv sync
+```
+
+Second, generate the gRPC code:
 
 ```shell
 uv run -m grpc_tools.protoc \
@@ -10,7 +16,13 @@ uv run -m grpc_tools.protoc \
     ../contracts/protobuf/tripsphere/itinerary/metadata.proto
 ```
 
-Then, start the server:
+Third, install the auto instrumentation:
+
+```shell
+uv run opentelemetry-bootstrap -a requirements | uv pip install --requirement -
+```
+
+Finally, start the server:
 
 ```shell
 uv run -m itinerary.server

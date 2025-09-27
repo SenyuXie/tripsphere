@@ -26,11 +26,19 @@ COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-dev
 
+# Install OpenTelemetry auto instrumentation
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv run opentelemetry-bootstrap -a requirements | uv pip install --requirement -
+
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Reset the entrypoint, don't invoke `uv`
 ENTRYPOINT []
+
+ENV OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED="true" \
+    OTEL_SERVICE_NAME="trip-itinerary-service" \
+    OTEL_EXPORTER_OTLP_ENDPOINT="http://otel-collector:4317"
 
 # Run the gRPC server by default
 CMD ["python", "-m", "itinerary.server"]
